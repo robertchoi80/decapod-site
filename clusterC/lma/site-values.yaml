@@ -2,7 +2,6 @@ apiVersion: openinfradev.github.com/v1
 kind: HelmValuesTransformer
 metadata:
   name: site
-
 global:
   nodeSelector:
     taco-lma: enabled
@@ -12,12 +11,10 @@ global:
   serviceScrapeInterval: 30s
   defaultPassword: password
   defaultUser: taco
-
 charts:
 - name: prometheus-operator
   override:
     prometheusOperator.nodeSelector: $(nodeSelector)
-
 - name: prometheus
   override:
     kubeEtcd.endpoints:
@@ -27,7 +24,6 @@ charts:
     prometheus.prometheusSpec.retention: 2d
     prometheus.prometheusSpec.externalLabels.taco_cluster: dev
     prometheus.prometheusSpec.nodeSelector: $(nodeSelector)
-    
 - name: prometheus-fed-master
   override:
     alertmanager.service.type: NodePort
@@ -39,23 +35,18 @@ charts:
     prometheus.prometheusSpec.nodeSelector: $(nodeSelector)
     prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName: $(storageClassName)
     prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage: 20Gi
-  
 - name: kube-state-metrics
   override:
     nodeSelector: $(nodeSelector)
-
 - name: prometheus-pushgateway
   override:
     nodeSelector: $(nodeSelector)
-
 - name: prometheus-process-exporter
   source:
     repository: $(repository)
-
 - name: eck-resource
   override:
     kibana.nodeSelector: $(nodeSelector)
-    
     elasticsearch.nodeSets.master.nodeSelector: $(nodeSelector)
     elasticsearch.nodeSets.master.count: 1
     elasticsearch.nodeSets.master.javaOpts: "-Xms1g -Xmx1g"
@@ -63,7 +54,6 @@ charts:
     elasticsearch.nodeSets.master.limitMem: 4Gi
     elasticsearch.nodeSets.master.pvc.storageClassName: $(storageClassName)
     elasticsearch.nodeSets.master.pvc.size: 1Gi
-
     elasticsearch.nodeSets.hotdata.nodeSelector: $(nodeSelector)
     elasticsearch.nodeSets.hotdata.count: 1
     elasticsearch.nodeSets.hotdata.javaOpts: "-Xms1g -Xmx1g"
@@ -71,7 +61,6 @@ charts:
     elasticsearch.nodeSets.hotdata.limitMem: 2Gi
     elasticsearch.nodeSets.hotdata.pvc.storageClassName: $(storageClassName)
     elasticsearch.nodeSets.hotdata.pvc.size: 10Gi
-
     elasticsearch.nodeSets.client.enabled: false
     elasticsearch.http:
       service:
@@ -82,12 +71,10 @@ charts:
             nodePort: 30002
             targetPort: 9002
             port: 9002
-
 - name: grafana
   override:
     adminPassword: password
     persistence.storageClassName: $(storageClassName)
-
 - name: fluentbit-operator
   source:
     repository: $(repository)
@@ -95,7 +82,6 @@ charts:
     global.base_cluster_url: $(clusterName)
     fluentbitOperator.nodeSelector: $(nodeSelector)
     logExporter.nodeSelector: $(nodeSelector)
-
 - name: fluentbit
   source:
     repository: $(repository)
@@ -109,27 +95,26 @@ charts:
     fluentbit.esTemplate.url: https://eck-elasticsearch-es-http.lma.svc.$(clusterName):9200
     fluentbit.nodeSelector: $(nodeSelector)
     fluentbit.targetLogs:
-       - bufferChunkSize: 2M
-         bufferMaxSize: 5M
-         do_not_store_as_default: true
-         index: container
-         memBufLimit: 20MB
-         multi_index:
-         - index: platform
-           key: $kubernetes['namespace_name']
-           value: kube-system|lma|fed|argo|openstack|istio-system|istio-services|trident|registry
-         name: dockerlog
-         parser: docker
-         path: /var/log/containers/*.log
-         tag: kube.*
-         type: fluent
-       - index: syslog
-         name: syslog
-         parser: syslog-rfc5424
-         path: /var/log/syslog
-         tag: syslog.*
-         type: syslog
-
+    - bufferChunkSize: 2M
+      bufferMaxSize: 5M
+      do_not_store_as_default: true
+      index: container
+      memBufLimit: 20MB
+      multi_index:
+      - index: platform
+        key: $kubernetes['namespace_name']
+        value: kube-system|lma|fed|argo|openstack|istio-system|istio-services|trident|registry
+      name: dockerlog
+      parser: docker
+      path: /var/log/containers/*.log
+      tag: kube.*
+      type: fluent
+    - index: syslog
+      name: syslog
+      parser: syslog-rfc5424
+      path: /var/log/syslog
+      tag: syslog.*
+      type: syslog
 - name: addons
   source:
     repository: $(repository)
@@ -149,11 +134,9 @@ charts:
     # tacoWatcher.joinCluster.body.grafanaUrl: http://grafana.fed.svc.$(clusterName)
     # tacoWatcher.joinCluster.body.k8sUrl: https://kubernetes.default.svc.$(clusterName)
     kibanaInit.url: http://eck-kibana-dashboard-kb-http.lma.svc.$(clusterName):5601
-
 - name: prometheus-adapter
   override:
     nodeSelector: $(nodeSelector)
-
 - name: kubernetes-event-exporter
   source:
     repository: $(repository)
@@ -179,6 +162,7 @@ charts:
     queryFrontend.service.http.nodePort: 30007
     querier.stores:
     - prometheus-operated.lma.svc.$(clusterName):10901
+    - thanos-sidecar.clusterB
     bucketweb.nodeSelector: $(nodeSelector)
     compactor.nodeSelector: $(nodeSelector)
     storegateway.nodeSelector: $(nodeSelector)
@@ -197,4 +181,3 @@ charts:
     minio.persistence.storageClass: $(storageClassName)
     minio.persistence.accessMode: ReadWriteOnce
     minio.persistence.size: 10Gi
-
