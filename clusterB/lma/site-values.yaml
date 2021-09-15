@@ -181,6 +181,7 @@ charts:
     - prometheus-operated.lma.svc.$(clusterName):10901
     - thanos-sidecar.clusterA
     - thanos-sidecar.clusterC
+    - thanos-sidecar.cluster_xy
     bucketweb.nodeSelector: $(nodeSelector)
     compactor.nodeSelector: $(nodeSelector)
     storegateway.nodeSelector: $(nodeSelector)
