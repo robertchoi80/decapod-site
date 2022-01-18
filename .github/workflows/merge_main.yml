@@ -38,7 +38,7 @@ jobs:
       - name: Pushes to the repository for argocd
         uses: cpina/github-action-push-to-another-repository@v1.3
         env:
-          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+          API_TOKEN_GITHUB: ${{ secrets.ROBERT_ACCESS_TOKEN }}
         with:
           source-directory: 'output'
           destination-github-username: 'robertchoi80'
