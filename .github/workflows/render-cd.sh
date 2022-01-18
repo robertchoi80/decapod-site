@@ -1,5 +1,5 @@
 #!/bin/bash
-DECAPOD_BASE_URL=https://github.com/openinfradev/decapod-base-yaml.git
+DECAPOD_BASE_URL=https://github.com/robertchoi80/decapod-base-yaml.git
 BRANCH="main"
 DOCKER_IMAGE_REPO="docker.io"
 GITHUB_IMAGE_REPO="ghcr.io"
