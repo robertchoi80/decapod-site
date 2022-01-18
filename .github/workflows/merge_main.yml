@@ -34,8 +34,8 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
           source-directory: 'output'
-          destination-github-username: 'openinfradev'
-          destination-repository-name: 'decapod-manifests'
+          destination-github-username: 'robertchoi80'
+          destination-repository-name: 'test-manifests'
           user-email: 'taco_support@sk.com'
           commit-message: See ORIGIN_COMMIT
           target-branch: main
