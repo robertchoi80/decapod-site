@@ -227,6 +227,7 @@ charts:
 
 - name: prepare-etcd-secret
   override:
+    deployer: "tacoplay"
     nodeSelector:
       "node-role.kubernetes.io/master": ""
     tolerations:
