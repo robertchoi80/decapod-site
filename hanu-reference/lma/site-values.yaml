@@ -40,7 +40,7 @@ charts:
     alertmanager.alertmanagerSpec.alertmanagerConfigSelector.matchLabels.alertmanagerConfig: example
     alertmanager.alertmanagerSpec.nodeSelector: $(nodeSelector)
     alertmanager.alertmanagerSpec.retention: 2h
-    alertmanager.config.global.slack_api_url: https://hooks.slack.com/services/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
+    alertmanager.config.global.slack_api_url: https://hooks.slack.com/services/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
 
 - name: prometheus-node-exporter  
   override:
