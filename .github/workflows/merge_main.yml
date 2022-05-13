@@ -42,7 +42,7 @@ jobs:
         with:
           source-directory: 'output'
           destination-github-username: 'robertchoi80'
-          destination-repository-name: 'test-manifests'
+          destination-repository-name: 'test-manifests-new'
           user-email: 'taco_support@sk.com'
           commit-message: See ORIGIN_COMMIT
           target-branch: ${{ steps.branch-name.outputs.current_branch }}
